@@ -65,7 +65,7 @@ public class Network {
         for (int i = 0;i<this.userCount;i++) {
             if (this.users[i].getName() == name) continue;
             mutual = user1.countMutual(this.users[i]);
-            if (max <= mutual) {max = mutual; recname = this.users[i].getName();}  
+            if (max < mutual || max == 0) {max = mutual; recname = this.users[i].getName();}  
         }
         return recname;
     }
