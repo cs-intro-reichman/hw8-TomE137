@@ -52,7 +52,7 @@ public class Network {
      *  or if the "follows" addition failed for some reason, returns false. */
     public boolean addFollowee(String name1, String name2) {
         if (this.getUser(name1) == null || this.getUser(name2) == null) return false;
-        if (this.getUser(name1).getfCount() == User.maxfCount) return false;
+        if (this.getUser(name1).getfCount() == User.maxfCount || name1 == name2) return false;
         return this.getUser(name1).addFollowee(name2);
     }
     
@@ -73,13 +73,13 @@ public class Network {
     /** Computes and returns the name of the most popular user in this network: 
      *  The user who appears the most in the follow lists of all the users. */
     public String mostPopularUser() {
-        int max = 0, temp = 0; String popuser = "";
+        int max = 0, temp = 0; String popuser = null;
         LinkedHashMap<String, Integer> followerscountmap = new LinkedHashMap<>();
         for (int i = 0;i<this.userCount;i++) followerscountmap.put(this.users[i].getName(), 0);
         for (int i = 0;i<this.userCount;i++) { 
             for(int j = 0;j<this.users[i].getfCount();j++) {
                 temp = followerscountmap.get(this.users[i].getfFollows()[j])+1;
-                if (temp>=max) {popuser = this.users[i].getfFollows()[j]; max=temp;}
+                if (temp>max || max == 0) {popuser = this.users[i].getfFollows()[j]; max=temp;}
                 followerscountmap.replace(this.users[i].getfFollows()[j], temp);
             }  
         }
@@ -101,9 +101,9 @@ public class Network {
 
     // Returns a textual description of all the users in this network, and who they follow.
     public String toString() {
-    String output = "Network:\n";
+    String output = "Network:";
        for (int i = 0; i<userCount; i++) {
-            output+=this.users[i].toString() + "\n";
+            output+= "\n" + this.users[i].toString();
        }
        return output;
     }
